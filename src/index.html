@@ -1,12 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <title>My App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <div id="my-widget-container" data-token="55034399a5dce3c0d66acf18e2b79f88b517d31c"></div>
-    <script src="src/index.js"></script>
-  </body>
+    <head>
+        <title>Javascript embedded application</title>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script src="bundle.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            CredApp.init({
+              token: "55034399a5dce3c0d66acf18e2b79f88b517d31c",
+              elementId: "root"
+            }); 
+        </script>
+    </body>
 </html>
-

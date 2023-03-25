@@ -5,7 +5,7 @@ import 'react-awesome-button/dist/styles.css';
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/styles.scss';
 import Confetti from 'react-confetti'
 
-function CredWidget() {
+const CredWidget = (props) => {
   const [result, setResult] = useState(null);
   const [address, setAddress] = useState('');
   const [buttonReleased, setButtonReleased] = useState(false);
@@ -35,8 +35,7 @@ function CredWidget() {
 
     setButtonReleased(false);
 
-    const container = document.getElementById('my-widget-container');
-    const token = container.getAttribute('data-token');
+    const token = props.token;
 
     const options = {
       method: 'GET',

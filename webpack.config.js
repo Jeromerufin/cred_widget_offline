@@ -2,17 +2,24 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+  entry: [
+    path.join(__dirname, "src", "index.js"),
+  ],
   output: {
     path: path.join(__dirname, "/dist"), // the bundle output path
     filename: "bundle.js", // the name of the bundle
+    library: 'CredApp',
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/index.html", // to import index.html file inside index.js
+      template: path.join(__dirname, "src", "index.html"), // to import index.html file inside index.js
     }),
   ],
   devServer: {
     port: 3030, // you can change the port
+    historyApiFallback: true
   },
   module: {
     rules: [
