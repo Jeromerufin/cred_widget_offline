@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { AwesomeButtonProgress } from 'react-awesome-button';
 import 'react-awesome-button/dist/styles.css';
-import AwesomeButtonStyles from 'react-awesome-button/src/styles/styles.scss';
 import Confetti from 'react-confetti'
+import cred_signature from './images/cred_signature.png';
 
 const CredWidget = (props) => {
   const [result, setResult] = useState(null);
@@ -75,7 +75,7 @@ const CredWidget = (props) => {
       </div>
       <AwesomeButtonProgress type="secondary" onPress={(element, next) => handleClick(element, next)}>
         <img
-          src={require('./cred_signature.png')}
+          src={cred_signature}
           style={{ width: 60, height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           alt="cred_signature.png"
         />
