@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "serve": "webpack serve --mode development",
+    "serve": "webpack serve --mode development --env ENVIRONMENT=development",
     "build": "webpack --mode production",
     "build:widget": "parcel build src/index.js --no-source-maps -d docs",
     "test": "react-scripts test",
@@ -78,6 +78,7 @@
     "autoprefixer": "^10.4.5",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
+    "dotenv": "^16.0.3",
     "eslint": "8.16.0",
     "eslint-config-next": "12.1.6",
     "eslint-plugin-import": "^2.26.0",

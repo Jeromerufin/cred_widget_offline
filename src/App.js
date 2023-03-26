@@ -6,95 +6,92 @@ import Confetti from 'react-confetti'
 import cred_signature from './images/cred_signature.png';
 
 const CredWidget = (props) => {
-  const [result, setResult] = useState(null);
-  const [address, setAddress] = useState('');
-  const [buttonReleased, setButtonReleased] = useState(false);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+    const [error, setError] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [score, setScore] = useState(null);
+    const [address, setAddress] = useState('');
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
+    useEffect(() => {
+        const handleResize = () => {
+            setWidth(window.innerWidth);
+            setHeight(window.innerHeight);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleClick = async (element, release) => {
+
+        setError(null);
+        setScore(null);
+
+        if (!address) {
+            release();
+            return;
+        }
+
+        const token = props.token;
+        const url = `${process.env.CRED_APP_API_URI}/api/score/address/${address}/`;
+        const options = {
+            method: 'GET',
+            headers: {
+                Authorization: `Token ${token}`,
+            },
+        };
+
+        fetch(url, options)
+            .then(response => Promise.all([response, response.json()]))
+            .then(([response, response_json]) => {
+                setIsLoaded(true);
+                console.log(response_json);
+                if(!response.ok) {
+                    setError(response_json.error);
+                    release(false, 'error');
+                }
+                else {
+                    setScore(response_json.value);
+                    release();
+                }
+            });
     };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
-  const handleChangeAddress = (event) => {
-    setAddress(event.target.value);
-  };
-
-  const handleClick = async (element, next) => {
-
-     if (!address) {
-      setButtonReleased(true);
-      return;
-    }
-
-    setButtonReleased(false);
-
-    const token = props.token;
-
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    };
-    const url = `https://beta.credprotocol.com/api/score/address/${address}`;
-    const response = await fetch(url, options);
-    const data = await response.json();
-    setResult(data);
-
-    if (data.status_code === 406) {
-      setResult({ message: 'Invalid Address' });
-      setTimeout(() => {
-        setResult({ message: 'Never Gonna...' });
-        setTimeout(() => {
-          window.open('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', '_blank');
-        }, 2000);
-      }, 2000);
-    } else if (data.status_code === 422) {
-      setResult({ message: 'No Score, go be a degen!' });
-      setTimeout(() => {
-        setResult(null);
-        window.open('https://giphy.com/embed/ktlaD9M83JO80xeqQd', '_blank');
-      }, 4000);
-    }
-    setButtonReleased(true);
-    next();
-  };
-
-  return (
-    <div className="App">
-      <div className="input-wrapper-address">
-        <label htmlFor="address">Enter an address:</label>
-        <input type="text" id="address" value={address} onChange={handleChangeAddress} />
-      </div>
-      <AwesomeButtonProgress type="secondary" onPress={(element, next) => handleClick(element, next)}>
-        <img
-          src={cred_signature}
-          style={{ width: 60, height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          alt="cred_signature.png"
-        />
-      </AwesomeButtonProgress>
-      {result && (
-        <div>
-          <div className="result">
-            {result.message ? <p>{result.message}</p> : <p>Cred Score: {result.value}</p>}
-            {result.value >= 850 && (
-                <div>
-            <p>Congratulations! You have a high Cred Score!</p>
-             <Confetti width={width} height={height} />
-                </div>
-          )}
-          </div>
+    return (
+        <div className="App">
+            <div className="input-wrapper-address">
+                <label htmlFor="address">Enter an address:</label>
+                <input
+                    type="text"
+                    id="address"
+                    value={address}
+                    onChange={event => setAddress(event.target.value)}
+                />
+            </div>
+            <AwesomeButtonProgress
+                type="secondary"
+                disabled={!address}
+                onPress={(element, release) => handleClick(element, release)}
+            >
+                <img
+                    src={cred_signature}
+                    style={{ width: 60, height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    alt="cred_signature.png"
+                />
+            </AwesomeButtonProgress>
+            <div className="result">
+                {error && <p>{error}</p>}
+                {score && <p>Cred Score: {score}</p>}
+                {score >= 850 && (
+                    <div>
+                        <p>Congratulations! You have a high Cred Score!</p>
+                        <Confetti width={width} height={height} />
+                    </div>
+                )}
+            </div>
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default CredWidget;
