@@ -5,6 +5,8 @@ import 'react-awesome-button/dist/styles.css';
 import Confetti from 'react-confetti'
 import cred_signature from './images/cred_signature.png';
 
+const CRED_APP_API_URI = "https://beta.credprotocol.com";
+
 const CredWidget = (props) => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -34,7 +36,7 @@ const CredWidget = (props) => {
         }
 
         const token = props.token;
-        const url = `${process.env.CRED_APP_API_URI}/api/score/address/${address}/`;
+        const url = `${CRED_APP_API_URI}/api/score/address/${address}/`;
         const options = {
             method: 'GET',
             headers: {
