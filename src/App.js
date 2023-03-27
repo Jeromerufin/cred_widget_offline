@@ -49,7 +49,7 @@ const CredWidget = (props) => {
     };
 
     return (
-        <div className='grid h-full place-items-center'>
+        <div className='grid h-full w-full place-items-center'>
             <div className='flex bg-dark-blue'>
                 <div>
                     <CredScoreTopSection
@@ -61,20 +61,22 @@ const CredWidget = (props) => {
                 <div className='flex flex-col m-16 justify-center'>
                     <div className='p-3'>
                         <input
-                            className='border border-gray-300 text-sm rounded-lg block p-2.5'
+                            className='border border-gray-300 text-sm rounded-lg block p-1.5'
                             type="text"
                             value={address}
                             placeholder="Enter address"
                             onChange={event => setAddress(event.target.value)}
                         />
                     </div>
-                    <AwesomeButtonProgress
-                        type="secondary"
-                        disabled={!address}
-                        onPress={(element, release) => handleClick(element, release)}
-                    >
-                        Get Score
-                    </AwesomeButtonProgress>
+                    <div className='flex flex-col p-auto'>
+                        <AwesomeButtonProgress
+                            type="secondary"
+                            disabled={!address}
+                            onPress={(element, release) => handleClick(element, release)}
+                        >
+                            Get Score
+                        </AwesomeButtonProgress>
+                    </div>
                     <div className="gap-y-5 tracking-wide text-white flex justify-center">
                         {error && <p>{error}</p>}
                         {score && <p>Cred Score: {score.value}</p>}

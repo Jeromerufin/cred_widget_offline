@@ -32,7 +32,6 @@ export const Card = ({
           />
         )}
         <div
-          className={childWrapperClass || "p-6 h-[calc(100%-8px-24px-24px)]"}
         >
           {children}
         </div>

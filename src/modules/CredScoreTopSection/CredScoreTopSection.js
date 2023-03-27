@@ -33,7 +33,7 @@ export const CredScoreTopSection = ({ credScoreData, loading, address }) => {
     return (
         <>
             <div className="flex flex-col gap-8 lg:flex-row">
-                <section className="grid flex-1 md:min-h-[614px]">
+                <section className="grid flex-1">
                     <Card darker glow>
                         <CircularCredScoreProgressBar
                             animationDuration={ANIMATION_DURATION}
