@@ -3,27 +3,15 @@ import './App.css';
 import { AwesomeButtonProgress } from 'react-awesome-button';
 import 'react-awesome-button/dist/styles.css';
 import Confetti from 'react-confetti'
-import cred_signature from './images/cred_signature.png';
+import { CredScoreTopSection } from "./modules/CredScoreTopSection";
 
 const CRED_APP_API_URI = "https://beta.credprotocol.com";
 
 const CredWidget = (props) => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [score, setScore] = useState(null);
+    const [score, setScore] = useState();
     const [address, setAddress] = useState('');
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWidth(window.innerWidth);
-            setHeight(window.innerHeight);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const handleClick = async (element, release) => {
 
@@ -31,7 +19,8 @@ const CredWidget = (props) => {
         setScore(null);
 
         if (!address) {
-            release();
+            setError('Address is empty');
+            release(false, 'error');
             return;
         }
 
@@ -48,49 +37,52 @@ const CredWidget = (props) => {
             .then(response => Promise.all([response, response.json()]))
             .then(([response, response_json]) => {
                 setIsLoaded(true);
-                console.log(response_json);
                 if(!response.ok) {
                     setError(response_json.error);
                     release(false, 'error');
                 }
                 else {
-                    setScore(response_json.value);
+                    setScore(response_json);
                     release();
                 }
             });
     };
 
     return (
-        <div className="App">
-            <div className="input-wrapper-address">
-                <label htmlFor="address">Enter an address:</label>
-                <input
-                    type="text"
-                    id="address"
-                    value={address}
-                    onChange={event => setAddress(event.target.value)}
-                />
-            </div>
-            <AwesomeButtonProgress
-                type="secondary"
-                disabled={!address}
-                onPress={(element, release) => handleClick(element, release)}
-            >
-                <img
-                    src={cred_signature}
-                    style={{ width: 60, height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                    alt="cred_signature.png"
-                />
-            </AwesomeButtonProgress>
-            <div className="result">
-                {error && <p>{error}</p>}
-                {score && <p>Cred Score: {score}</p>}
-                {score >= 850 && (
-                    <div>
-                        <p>Congratulations! You have a high Cred Score!</p>
-                        <Confetti width={width} height={height} />
+        <div className='grid h-full place-items-center'>
+            <div className='flex bg-dark-blue'>
+                <div>
+                    <CredScoreTopSection
+                        address={address}
+                        credScoreData={score}
+                        loading={!isLoaded}
+                    />
+                </div>
+                <div className='flex flex-col m-16 justify-center'>
+                    <div className='p-3'>
+                        <input
+                            className='border border-gray-300 text-sm rounded-lg block p-2.5'
+                            type="text"
+                            value={address}
+                            placeholder="Enter address"
+                            onChange={event => setAddress(event.target.value)}
+                        />
                     </div>
-                )}
+                    <AwesomeButtonProgress
+                        type="secondary"
+                        disabled={!address}
+                        onPress={(element, release) => handleClick(element, release)}
+                    >
+                        Get Score
+                    </AwesomeButtonProgress>
+                    <div className="gap-y-5 tracking-wide text-white flex justify-center">
+                        {error && <p>{error}</p>}
+                        {score && <p>Cred Score: {score.value}</p>}
+                        {/* {score && score.value >= 850 && (
+                            <Confetti numberOfPieces='200' className='h-full w-full' />
+                        )} */}
+                    </div>
+                </div>
             </div>
         </div>
     );
