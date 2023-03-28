@@ -10,7 +10,7 @@ const CRED_APP_API_URI = "https://beta.credprotocol.com";
 const CredWidget = (props) => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [score, setScore] = useState();
+    const [score, setScore] = useState({value: 722, value_rating: "Fair"});
     const [address, setAddress] = useState('');
 
     const handleClick = async (element, release) => {
@@ -49,9 +49,9 @@ const CredWidget = (props) => {
     };
 
     return (
-        <div className='grid h-full w-full place-items-center'>
-            <div className='flex bg-dark-blue'>
-                <div>
+        <div className='grid place-items-center'>
+            <div className='flex bg-dark-blue min-w-[300px] min-h-[200px]'>
+                <div className='min-w-[300px]'>
                     <CredScoreTopSection
                         address={address}
                         credScoreData={score}
@@ -76,13 +76,6 @@ const CredWidget = (props) => {
                         >
                             Get Score
                         </AwesomeButtonProgress>
-                    </div>
-                    <div className="gap-y-5 tracking-wide text-white flex justify-center">
-                        {error && <p>{error}</p>}
-                        {score && <p>Cred Score: {score.value}</p>}
-                        {/* {score && score.value >= 850 && (
-                            <Confetti numberOfPieces='200' className='h-full w-full' />
-                        )} */}
                     </div>
                 </div>
             </div>
