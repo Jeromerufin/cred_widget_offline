@@ -14,9 +14,8 @@ export const Card = ({
       <div
         {...props}
         className={classNames(
-          "rounded-xl border-2",
+          "rounded-xl",
           borderColor || "border-cred-light-blue-opacity-0.2",
-          darker ? "bg-dark-blue" : "bg-cred-blue",
           props.className
         )}
         style={{
