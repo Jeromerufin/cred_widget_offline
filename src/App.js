@@ -10,7 +10,7 @@ const CRED_APP_API_URI = "https://beta.credprotocol.com";
 const CredWidget = (props) => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [score, setScore] = useState({value: 722, value_rating: "Fair"});
+    const [score, setScore] = useState();
     const [address, setAddress] = useState('');
 
     const handleClick = async (element, release) => {
